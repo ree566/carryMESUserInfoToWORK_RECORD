@@ -1,0 +1,40 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "carryMESUserInfoToWORK_RECORD", "carryMESUserInfoToWORK_RECORD\carryMESUserInfoToWORK_RECORD.csproj", "{6E66333C-96EC-4B70-AC69-BBBBE02C85DF}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ClassLibrary", "ClassLibrary", "{A8038747-D85C-48F5-BC11-9E3590587929}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SQLQuery2", "..\ClassLibrary\SQLQuery2\SQLQuery2.csproj", "{2407D82D-83AC-48F7-9BF4-077612C06A49}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DLL_MESQuery", "..\ClassLibrary\DLL_MESQuery\DLL_MESQuery.csproj", "{BA17177A-C76F-4F4B-BD7B-3DCA566E1EBE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6E66333C-96EC-4B70-AC69-BBBBE02C85DF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6E66333C-96EC-4B70-AC69-BBBBE02C85DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6E66333C-96EC-4B70-AC69-BBBBE02C85DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6E66333C-96EC-4B70-AC69-BBBBE02C85DF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2407D82D-83AC-48F7-9BF4-077612C06A49}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2407D82D-83AC-48F7-9BF4-077612C06A49}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2407D82D-83AC-48F7-9BF4-077612C06A49}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2407D82D-83AC-48F7-9BF4-077612C06A49}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BA17177A-C76F-4F4B-BD7B-3DCA566E1EBE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BA17177A-C76F-4F4B-BD7B-3DCA566E1EBE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BA17177A-C76F-4F4B-BD7B-3DCA566E1EBE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BA17177A-C76F-4F4B-BD7B-3DCA566E1EBE}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{2407D82D-83AC-48F7-9BF4-077612C06A49} = {A8038747-D85C-48F5-BC11-9E3590587929}
+		{BA17177A-C76F-4F4B-BD7B-3DCA566E1EBE} = {A8038747-D85C-48F5-BC11-9E3590587929}
+	EndGlobalSection
+EndGlobal
