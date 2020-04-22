@@ -529,18 +529,18 @@ namespace carryMESUserInfoToWORK_RECORD
                         break;
                     case "TWM3":
                         strsql = "SELECT [WorkDate],[USER_NO],[LOCAL_NAME],[WERKS],[UNIT_NO],[LINE_DESC],[STATION_ID],[CLASS_ID],[OVER_H],[PREPAR_REST_H], " +
-                                              "[FACT_REST_H],[LEAVE_H],[FACT_WORK_H],[BREAK_TIME],[CLASS_NO],[cost_center],[Dep1],[Dep2],[Dep3],[Dep4],[inputtime], " +
+                                              "[FACT_REST_H],[LEAVE_H],[FACT_WORK_H],CASE [BREAK_TIME] WHEN 0 THEN 0 ELSE 15 END 'BREAK_TIME',[CLASS_NO],[cost_center],[Dep1],[Dep2],[Dep3],[Dep4],[inputtime], " +
                                               "[EMPLR_ID],[INPUT_HRS_FLAG],[ONBOARD_DT] FROM [IE].[TxWorkManpower002] where convert(date,[LASTUPDATE]) >= convert(date,getdate()-1)  AND [WorkDate]>='2020-03-25' AND WERKS='" + WERKS + "' AND [cost_center] IN('PD01') AND [UNIT_NO] IN ('A','B','T','P')";
 
                         //維修
                         strsql += " UNION ALL ";
                         strsql += "SELECT [WorkDate],[USER_NO],[LOCAL_NAME],[WERKS],[UNIT_NO],[LINE_DESC],[STATION_ID],[CLASS_ID],[OVER_H],[PREPAR_REST_H], " +
-                                              "[FACT_REST_H],[LEAVE_H],[FACT_WORK_H],[BREAK_TIME],[CLASS_NO],[cost_center],[Dep1],[Dep2],[Dep3],[Dep4],[inputtime], " +
+                                              "[FACT_REST_H],[LEAVE_H],[FACT_WORK_H],CASE [BREAK_TIME] WHEN 0 THEN 0 ELSE 15 END 'BREAK_TIME',[CLASS_NO],[cost_center],[Dep1],[Dep2],[Dep3],[Dep4],[inputtime], " +
                                               "[EMPLR_ID],[INPUT_HRS_FLAG],[ONBOARD_DT] FROM [IE].[TxWorkManpower002] where convert(date,[LASTUPDATE]) >= convert(date,getdate()-1)  AND [WorkDate]>='2020-03-26' AND WERKS='" + WERKS + "' AND [UNIT_NO] IN ('G') ";
                         //艾肯出勤人員明細
                         strsql += " UNION ALL ";
                         strsql += " SELECT C.DATE,A.[USER_NO],[USER_NAME_CH],A.[WERKS],A.[UNIT_NO],[LINE_DESC],A.[STATION_ID],A.[CLASS_ID],0 OVER_H,0 PREPAR_REST_H " +
-                                                        ",0 FACT_REST_H,0 LEAVE_H,(CASE WHEN C.WORKDAYFLAG=1 THEN 8 ELSE 0 END) FACT_WORK_H,(CASE WHEN C.WORKDAYFLAG=1 THEN 20 ELSE 0 END) BREAK_TIME " +
+                                                        ",0 FACT_REST_H,0 LEAVE_H,(CASE WHEN C.WORKDAYFLAG=1 THEN 8 ELSE 0 END) FACT_WORK_H,(CASE WHEN C.WORKDAYFLAG=1 THEN 15 ELSE 0 END) BREAK_TIME " +
                                                         ",A.[CLASS_NO],A.[DEPT_NO] cost_center,'' Dep1,'' Dep2,'' Dep3,'' Dep4,8 inputtime,A.[USER_NO] EMPLR_ID,[INPUT_HRS_FLAG],'' ONBOARD_DT " +
                                                         "FROM [ATMC].[IE_MES].[MES_QryUserInfo001] A LEFT JOIN [ATMC].[IE_MES].[QryWorkManPower] B ON A.USER_NO=B.USER_NO AND A.cr_datetime=B.POWER_DATE " +
                                                         "LEFT JOIN [ATMC].[IE].[WORKDAYCALENDAR] C ON A.cr_datetime=C.DATE " +
@@ -551,13 +551,13 @@ namespace carryMESUserInfoToWORK_RECORD
 
                     case "TWM6":
                         strsql = "SELECT [WorkDate],[USER_NO],[LOCAL_NAME],[WERKS],[UNIT_NO],[LINE_DESC],[STATION_ID],[CLASS_ID],[OVER_H],[PREPAR_REST_H], " +
-                                              "[FACT_REST_H],[LEAVE_H],[FACT_WORK_H],[BREAK_TIME],[CLASS_NO],[cost_center],[Dep1],[Dep2],[Dep3],[Dep4],[inputtime], " +
+                                              "[FACT_REST_H],[LEAVE_H],[FACT_WORK_H],CASE [BREAK_TIME] WHEN 0 THEN 0 ELSE 15 END 'BREAK_TIME',[CLASS_NO],[cost_center],[Dep1],[Dep2],[Dep3],[Dep4],[inputtime], " +
                                               "[EMPLR_ID],[INPUT_HRS_FLAG],[ONBOARD_DT] FROM [IE].[TxWorkManpower002] where convert(date,[LASTUPDATE]) >= convert(date,getdate()-1)  AND [WorkDate]>='2020-03-26' AND WERKS='" + WERKS + "' AND [cost_center] IN('PV01') AND [UNIT_NO] IN ('A','B','T','P') ";
                      
                         //艾肯出勤人員明細
                         strsql += " UNION ALL ";
                         strsql += " SELECT C.DATE,A.[USER_NO],[USER_NAME_CH],A.[WERKS],A.[UNIT_NO],[LINE_DESC],A.[STATION_ID],A.[CLASS_ID],0 OVER_H,0 PREPAR_REST_H " +
-                                                        ",0 FACT_REST_H,0 LEAVE_H,(CASE WHEN C.WORKDAYFLAG=1 THEN 8 ELSE 0 END) FACT_WORK_H,(CASE WHEN C.WORKDAYFLAG=1 THEN 20 ELSE 0 END) BREAK_TIME " +
+                                                        ",0 FACT_REST_H,0 LEAVE_H,(CASE WHEN C.WORKDAYFLAG=1 THEN 8 ELSE 0 END) FACT_WORK_H,(CASE WHEN C.WORKDAYFLAG=1 THEN 15 ELSE 0 END) BREAK_TIME " +
                                                         ",A.[CLASS_NO],A.[DEPT_NO] cost_center,'' Dep1,'' Dep2,'' Dep3,'' Dep4,8 inputtime,A.[USER_NO] EMPLR_ID,[INPUT_HRS_FLAG],'' ONBOARD_DT " +
                                                         "FROM [ATMC].[IE_MES].[MES_QryUserInfo001] A LEFT JOIN [ATMC].[IE_MES].[QryWorkManPower] B ON A.USER_NO=B.USER_NO AND A.cr_datetime=B.POWER_DATE " +
                                                         "LEFT JOIN [ATMC].[IE].[WORKDAYCALENDAR] C ON A.cr_datetime=C.DATE " +
