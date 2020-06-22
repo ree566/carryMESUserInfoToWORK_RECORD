@@ -50,7 +50,7 @@ namespace carryMESUserInfoToWORK_RECORD
 
         public void startprocess()
         {
-           // capWORK_RECORD();
+            // capWORK_RECORD();
             capini();
             COPY_QryWorkClass();
             UPDATE_MES_QryUserInfo001();
@@ -58,7 +58,7 @@ namespace carryMESUserInfoToWORK_RECORD
         #region 批量移轉資料至ATMC
         //  public void capWORK_RECORD()
         //  {
-                //TESERVER228db TESERVER228db = new TESERVER228db();
+        //TESERVER228db TESERVER228db = new TESERVER228db();
         //      for (int i1 = 0; i1 < 200; i1++)
         //      {
         //          I.WriteLineANDTextFile( "START:i1=" + i1 );
@@ -167,7 +167,7 @@ namespace carryMESUserInfoToWORK_RECORD
             {
                 I.WriteLineANDTextFile(System.Reflection.MethodBase.GetCurrentMethod().Name + ":" + WERKS + "Start");
                 string STRSQL = "SELECT * FROM ( ";
-                STRSQL += " SELECT [USER_ID],[USER_NO],[WERKS],[DEPT_ID],[cr_datetime] FROM [ATMC].[IE_MES].[MES_QryUserInfo001]  WHERE [cr_datetime] > GETDATE()-1 AND [WERKS]='"+ WERKS +"') A LEFT JOIN  ";
+                STRSQL += " SELECT [USER_ID],[USER_NO],[WERKS],[DEPT_ID],[cr_datetime] FROM [ATMC].[IE_MES].[MES_QryUserInfo001]  WHERE [cr_datetime] > GETDATE()-1 AND [WERKS]='" + WERKS + "') A LEFT JOIN  ";
                 STRSQL += " (SELECT DISTINCT[EMPLR_ID],[DIMISSIONDATE] FROM [ATMC].[IE].VW_Profile WHERE [DIMISSIONDATE] <> '') B  ";
                 STRSQL += " ON A.[USER_NO]=B.EMPLR_ID WHERE [DIMISSIONDATE] IS NOT NULL AND B.[DIMISSIONDATE] < A.[cr_datetime] ";
                 DataSet set1 = new DataSet();
@@ -220,14 +220,14 @@ namespace carryMESUserInfoToWORK_RECORD
                     if (dtQryUserInfo001.Rows.Count > 0)
                     {
                         string nresult = ATMCdb.SqlBulkCopy(dtQryUserInfo001, sColumnName1, "IE_MES.MES_QryUserInfo001");
-                        if (nresult=="OK")
+                        if (nresult == "OK")
                         {
                             I.WriteLineANDTextFile(System.Reflection.MethodBase.GetCurrentMethod().Name + ":" + " AMES工站資訊上傳資料庫:上傳成功總筆數： " + dtQryUserInfo001.Rows.Count);
                             ATMCdb.savemessage(failMSG, WERKS[i2] + " AMES工站資訊上傳資料庫", "上傳成功總筆數： " + dtQryUserInfo001.Rows.Count);
                         }
                         else
                         {
-                            I.WriteLineANDTextFile(System.Reflection.MethodBase.GetCurrentMethod().Name + ":" + " AMES工站資訊上傳資料庫 上傳失敗："+ nresult);
+                            I.WriteLineANDTextFile(System.Reflection.MethodBase.GetCurrentMethod().Name + ":" + " AMES工站資訊上傳資料庫 上傳失敗：" + nresult);
                             ATMCdb.savemessage("NG", WERKS[i2] + " AMES工站資訊上傳資料庫", "上傳失敗");
                         }
                     }
@@ -262,7 +262,7 @@ namespace carryMESUserInfoToWORK_RECORD
             if (ATMCdb.Exsql("DELETE FROM [ATMC].[IE].[VW_Profile] WHERE convert(date,cr_datetime) = convert(date,getdate())"))
             {
                 ATMCdb.Exsql("DELETE FROM [ATMC].[IE].[VW_DutyShift_Linkou]");
-                
+
             }
             string sparam = "SELECT [EMPLR_ID],[EMAIL_ADDR],[LOCAL_NAME],[PER_LEVEL],[DLIDL],[TIMECLASSCODE],[SHIFT_ID],[MGREMAIL_ADDR],[Dep0]";
             sparam += ",ISNULL([Dep1],'') Dep1,ISNULL([Dep2],'') Dep2,ISNULL([Dep3],'') Dep3,ISNULL([Dep4],'') Dep4,[cost_center],[Emp_Status],[DIMISSIONDATE],[ONBOARD_DT]";
@@ -281,14 +281,14 @@ namespace carryMESUserInfoToWORK_RECORD
                 if (dt.Rows.Count > 0)
                 {
                     ATMCdb.Exsql("DELETE FROM [ATMC].[IE].[VW_Profile] WHERE convert(date,cr_datetime) = convert(date,getdate())");
-                    string[] sColumnName=new string[dt.Columns.Count] ;
-                    
+                    string[] sColumnName = new string[dt.Columns.Count];
+
                     for (int i = 0; i < dt.Columns.Count; i++)
                     {
                         sColumnName[i] = dt.Columns[i].ToString();
                     }
                     string nresult = ATMCdb.SqlBulkCopy(dt, sColumnName, "IE.VW_Profile");
-                    if (nresult=="OK")
+                    if (nresult == "OK")
                     {
                         string sparam3 = "UPDATE A SET A.[DIMISSIONDATE] = B.[DIMISSIONDATE] FROM [ATMC].[IE].[VW_Profile] A LEFT JOIN (SELECT [EMPLR_ID],[DIMISSIONDATE] FROM [ATMC].[IE].[VW_Profile] WHERE ISNULL([DIMISSIONDATE],'') <>'' AND convert(date,cr_datetime) = convert(date,getdate())) B ON A.[EMPLR_ID] =B.[EMPLR_ID] WHERE A.[DIMISSIONDATE] <> B.[DIMISSIONDATE]";
                         ATMCdb.Exsql(sparam3);
@@ -296,11 +296,11 @@ namespace carryMESUserInfoToWORK_RECORD
                         ATMCdb.Exsql("DELETE FROM [ATMC].[IE].[VW_Profile] WHERE  ([cr_datetime] > CONVERT(DATE,[DIMISSIONDATE])  AND [DIMISSIONDATE] <>　'') OR [EMPLR_ID] IS NULL");
                         ATMCdb.Exsql("DELETE FROM [ATMC].[IE].[WORK_RECORD] WHERE  ([WorkDate] > CONVERT(DATE,[DIMISSIONDATE])  AND [DIMISSIONDATE] <>　'') OR [EMPLR_ID] IS NULL");
                         I.WriteLineANDTextFile(System.Reflection.MethodBase.GetCurrentMethod().Name + ":" + "IE.VW_Profile SqlBulkCopy:" + "成功");
-                        FLAG ="OK";
+                        FLAG = "OK";
                     }
                     else
                     {
-                        I.WriteLineANDTextFile(System.Reflection.MethodBase.GetCurrentMethod().Name + ":" + "IE.VW_Profile SqlBulkCopy:" + "失敗 ：" +nresult);
+                        I.WriteLineANDTextFile(System.Reflection.MethodBase.GetCurrentMethod().Name + ":" + "IE.VW_Profile SqlBulkCopy:" + "失敗 ：" + nresult);
                     }
                 }
                 //COPY 班別表
@@ -314,10 +314,10 @@ namespace carryMESUserInfoToWORK_RECORD
                         sColumnName1[i] = dt1.Columns[i].ToString();
                     }
                     string nresult1 = ATMCdb.SqlBulkCopy(dt1, sColumnName1, "IE.VW_DutyShift_Linkou");
-                    if (nresult1=="OK")
+                    if (nresult1 == "OK")
                     {
                         I.WriteLineANDTextFile(System.Reflection.MethodBase.GetCurrentMethod().Name + ":" + "IE.VW_DutyShift_Linkou SqlBulkCopy:" + "成功");
-                        FLAG="OK";
+                        FLAG = "OK";
                     }
                     else
                     {
@@ -337,11 +337,11 @@ namespace carryMESUserInfoToWORK_RECORD
                         sColumnName1[i] = dt2.Columns[i].ToString();
                     }
                     string nresult2 = ATMCdb.SqlBulkCopy(dt2, sColumnName1, "IE.VW_CALENDAR_Linkou");
-                    if (nresult2=="OK")
+                    if (nresult2 == "OK")
                     {
                         I.WriteLineANDTextFile(System.Reflection.MethodBase.GetCurrentMethod().Name + ":" + "IE.VW_CALENDAR_Linkou SqlBulkCopy:" + "成功");
-                        string nresult3=ATMCdb.scalstp("IE.PROC_WORKDAYCALENDAR");
-                        if (nresult3=="OK")
+                        string nresult3 = ATMCdb.scalstp("IE.PROC_WORKDAYCALENDAR");
+                        if (nresult3 == "OK")
                         {
                             I.WriteLineANDTextFile(System.Reflection.MethodBase.GetCurrentMethod().Name + ":" + "[IE].[PROC_WORKDAYCALENDAR] 預存程序:" + "成功");
                         }
@@ -397,7 +397,7 @@ namespace carryMESUserInfoToWORK_RECORD
                         sColumnName[i] = dt.Columns[i].ToString();
                     }
                     string nresult = ATMCdb.SqlBulkCopy(dt, sColumnName, "IE.WORK_RECORD_TEMP");
-                    if (nresult=="OK")
+                    if (nresult == "OK")
                     {
                         //test
                         I.WriteLineANDTextFile(System.Reflection.MethodBase.GetCurrentMethod().Name + ":" + "IE.WORK_RECORD_TEMP SqlBulkCopy:" + "成功");
@@ -423,7 +423,7 @@ namespace carryMESUserInfoToWORK_RECORD
                     }
                     else
                     {
-                        I.WriteLineANDTextFile(System.Reflection.MethodBase.GetCurrentMethod().Name + ":" + "IE.WORK_RECORD_TEMP SqlBulkCopy:" + "失敗:"+ nresult);
+                        I.WriteLineANDTextFile(System.Reflection.MethodBase.GetCurrentMethod().Name + ":" + "IE.WORK_RECORD_TEMP SqlBulkCopy:" + "失敗:" + nresult);
                     }
                 }
 
@@ -454,8 +454,8 @@ namespace carryMESUserInfoToWORK_RECORD
                 string sSTARTDATE = DateTime.Now.AddDays(-2).ToString("yyyy-MM-dd");
                 capEmployee_NewDATA();
                 capWorkRecordToATMC(sSTARTDATE);
-                string nresult= ATMCdb.scalstp("[IE].[UPDATE_WORK_RECORD]");
-                if (nresult=="OK")
+                string nresult = ATMCdb.scalstp("[IE].[UPDATE_WORK_RECORD]");
+                if (nresult == "OK")
                 {
                     I.WriteLineANDTextFile(System.Reflection.MethodBase.GetCurrentMethod().Name + ":" + "[IE].[UPDATE_WORK_RECORD] 預存程序:" + "成功");
                     ATMCdb.savemessage("OK", "考勤系統結轉暨MES投入工時上傳", "預存程序完成");
@@ -477,7 +477,7 @@ namespace carryMESUserInfoToWORK_RECORD
         #region 匯入AMES投入工時明細
         public void TxWorkManpower002(string WERKS)
         {
-            I.WriteLineANDTextFile(System.Reflection.MethodBase.GetCurrentMethod().Name + ":" + WERKS+ "Start");
+            I.WriteLineANDTextFile(System.Reflection.MethodBase.GetCurrentMethod().Name + ":" + WERKS + "Start");
             try
             {
                 DataTable dtErrorRowdata = new DataTable();
@@ -528,32 +528,42 @@ namespace carryMESUserInfoToWORK_RECORD
                                                         "where left(A.[USER_NO],1)='I'  AND A.WERKS='" + WERKS + "' and [cr_datetime] >='2019-12-04' AND [cr_datetime] =  convert(date,getdate()) AND  [FACT_WORK_H] IS NULL AND A.[UNIT_NO] IN ('A','B','T','P') ";
                         break;
                     case "TWM3":
-                        strsql = "SELECT [WorkDate],[USER_NO],[LOCAL_NAME],[WERKS],[UNIT_NO],[LINE_DESC],[STATION_ID],[CLASS_ID],[OVER_H],[PREPAR_REST_H], " +
-                                              "[FACT_REST_H],[LEAVE_H],[FACT_WORK_H],CASE [BREAK_TIME] WHEN 0 THEN 0 ELSE 15 END 'BREAK_TIME',[CLASS_NO],[cost_center],[Dep1],[Dep2],[Dep3],[Dep4],[inputtime], " +
-                                              "[EMPLR_ID],[INPUT_HRS_FLAG],[ONBOARD_DT] FROM [IE].[TxWorkManpower002] where convert(date,[LASTUPDATE]) >= convert(date,getdate()-1)  AND [WorkDate]>='2020-03-25' AND WERKS='" + WERKS + "' AND [cost_center] IN('PD01') AND [UNIT_NO] IN ('A','B','T','P')";
+                        //TWM3 special trigger, only upload when hour 7 or 8.(OZ)
+                        if (DateTime.Now.Hour == 7 || DateTime.Now.Hour == 8 || DateTime.Now.Hour == 17 || DateTime.Now.Hour == 18)
+                        {
 
-                        //維修
-                        strsql += " UNION ALL ";
-                        strsql += "SELECT [WorkDate],[USER_NO],[LOCAL_NAME],[WERKS],[UNIT_NO],[LINE_DESC],[STATION_ID],[CLASS_ID],[OVER_H],[PREPAR_REST_H], " +
-                                              "[FACT_REST_H],[LEAVE_H],[FACT_WORK_H],CASE [BREAK_TIME] WHEN 0 THEN 0 ELSE 15 END 'BREAK_TIME',[CLASS_NO],[cost_center],[Dep1],[Dep2],[Dep3],[Dep4],[inputtime], " +
-                                              "[EMPLR_ID],[INPUT_HRS_FLAG],[ONBOARD_DT] FROM [IE].[TxWorkManpower002] where convert(date,[LASTUPDATE]) >= convert(date,getdate()-1)  AND [WorkDate]>='2020-03-26' AND WERKS='" + WERKS + "' AND [UNIT_NO] IN ('G') ";
-                        //艾肯出勤人員明細
-                        strsql += " UNION ALL ";
-                        strsql += " SELECT C.DATE,A.[USER_NO],[USER_NAME_CH],A.[WERKS],A.[UNIT_NO],[LINE_DESC],A.[STATION_ID],A.[CLASS_ID],0 OVER_H,0 PREPAR_REST_H " +
-                                                        ",0 FACT_REST_H,0 LEAVE_H,(CASE WHEN C.WORKDAYFLAG=1 THEN 8 ELSE 0 END) FACT_WORK_H,(CASE WHEN C.WORKDAYFLAG=1 THEN 15 ELSE 0 END) BREAK_TIME " +
-                                                        ",A.[CLASS_NO],A.[DEPT_NO] cost_center,'' Dep1,'' Dep2,'' Dep3,'' Dep4,8 inputtime,A.[USER_NO] EMPLR_ID,[INPUT_HRS_FLAG],'' ONBOARD_DT " +
-                                                        "FROM [ATMC].[IE_MES].[MES_QryUserInfo001] A LEFT JOIN [ATMC].[IE_MES].[QryWorkManPower] B ON A.USER_NO=B.USER_NO AND A.cr_datetime=B.POWER_DATE " +
-                                                        "LEFT JOIN [ATMC].[IE].[WORKDAYCALENDAR] C ON A.cr_datetime=C.DATE " +
-                                                        "where left(A.[USER_NO],1)='I'  AND A.WERKS='" + WERKS + "' and [cr_datetime] >='2020-03-25' AND [cr_datetime] =  convert(date,getdate()) AND  [FACT_WORK_H] IS NULL AND A.[UNIT_NO] IN ('A','B','T','P') ";
+                            //All data just need upload what [WorkDate] >= convert(date,getdate()-1)
+                            strsql = "SELECT [WorkDate],[USER_NO],[LOCAL_NAME],[WERKS],[UNIT_NO],[LINE_DESC],[STATION_ID],[CLASS_ID],[OVER_H],[PREPAR_REST_H], " +
+                                                  "[FACT_REST_H],[LEAVE_H],[FACT_WORK_H],CASE [BREAK_TIME] WHEN 0 THEN 0 ELSE 15 END 'BREAK_TIME',[CLASS_NO],[cost_center],[Dep1],[Dep2],[Dep3],[Dep4],[inputtime], " +
+                                                  "[EMPLR_ID],[INPUT_HRS_FLAG],[ONBOARD_DT] FROM [IE].[TxWorkManpower002] where convert(date,[LASTUPDATE]) >= convert(date,getdate()-1)  AND [WorkDate]>=convert(date,getdate()-3) AND WERKS='" + WERKS + "' AND [cost_center] IN('PD01') AND [UNIT_NO] IN ('A','B','T','P')";
 
-
+                            //維修
+                            strsql += " UNION ALL ";
+                            strsql += "SELECT [WorkDate],[USER_NO],[LOCAL_NAME],[WERKS],[UNIT_NO],[LINE_DESC],[STATION_ID],[CLASS_ID],[OVER_H],[PREPAR_REST_H], " +
+                                                  "[FACT_REST_H],[LEAVE_H],[FACT_WORK_H],CASE [BREAK_TIME] WHEN 0 THEN 0 ELSE 15 END 'BREAK_TIME',[CLASS_NO],[cost_center],[Dep1],[Dep2],[Dep3],[Dep4],[inputtime], " +
+                                                  "[EMPLR_ID],[INPUT_HRS_FLAG],[ONBOARD_DT] FROM [IE].[TxWorkManpower002] where convert(date,[LASTUPDATE]) >= convert(date,getdate()-1)  AND [WorkDate]>='2020-03-26' AND WERKS='" + WERKS + "' AND [UNIT_NO] IN ('G') ";
+                            //艾肯出勤人員明細
+                            strsql += " UNION ALL ";
+                            strsql += " SELECT C.DATE,A.[USER_NO],[USER_NAME_CH],A.[WERKS],A.[UNIT_NO],[LINE_DESC],A.[STATION_ID],A.[CLASS_ID],0 OVER_H,0 PREPAR_REST_H " +
+                                                            ",0 FACT_REST_H,0 LEAVE_H,(CASE WHEN C.WORKDAYFLAG=1 THEN 8 ELSE 0 END) FACT_WORK_H,(CASE WHEN C.WORKDAYFLAG=1 THEN 15 ELSE 0 END) BREAK_TIME " +
+                                                            ",A.[CLASS_NO],A.[DEPT_NO] cost_center,'' Dep1,'' Dep2,'' Dep3,'' Dep4,8 inputtime,A.[USER_NO] EMPLR_ID,[INPUT_HRS_FLAG],'' ONBOARD_DT " +
+                                                            "FROM [ATMC].[IE_MES].[MES_QryUserInfo001] A LEFT JOIN [ATMC].[IE_MES].[QryWorkManPower] B ON A.USER_NO=B.USER_NO AND A.cr_datetime=B.POWER_DATE " +
+                                                            "LEFT JOIN [ATMC].[IE].[WORKDAYCALENDAR] C ON A.cr_datetime=C.DATE " +
+                                                            "where left(A.[USER_NO],1)='I'  AND A.WERKS='" + WERKS + "' and [cr_datetime] >=convert(date,getdate()-3) AND [cr_datetime] =  convert(date,getdate()) AND  [FACT_WORK_H] IS NULL AND A.[UNIT_NO] IN ('A','B','T','P') ";
+                        }
+                        else
+                        {
+                            strsql += "SELECT top 0 [WorkDate],[USER_NO],[LOCAL_NAME],[WERKS],[UNIT_NO],[LINE_DESC],[STATION_ID],[CLASS_ID],[OVER_H],[PREPAR_REST_H], ";
+                            strsql += "[FACT_REST_H],[LEAVE_H],[FACT_WORK_H], [BREAK_TIME] ,[CLASS_NO],[cost_center],[Dep1],[Dep2],[Dep3],[Dep4],[inputtime], ";
+                            strsql += "[EMPLR_ID],[INPUT_HRS_FLAG],[ONBOARD_DT] FROM[IE].[TxWorkManpower002]";
+                        }
                         break;
 
                     case "TWM6":
                         strsql = "SELECT [WorkDate],[USER_NO],[LOCAL_NAME],[WERKS],[UNIT_NO],[LINE_DESC],[STATION_ID],[CLASS_ID],[OVER_H],[PREPAR_REST_H], " +
                                               "[FACT_REST_H],[LEAVE_H],[FACT_WORK_H],CASE [BREAK_TIME] WHEN 0 THEN 0 ELSE 15 END 'BREAK_TIME',[CLASS_NO],[cost_center],[Dep1],[Dep2],[Dep3],[Dep4],[inputtime], " +
                                               "[EMPLR_ID],[INPUT_HRS_FLAG],[ONBOARD_DT] FROM [IE].[TxWorkManpower002] where convert(date,[LASTUPDATE]) >= convert(date,getdate()-1)  AND [WorkDate]>='2020-03-26' AND WERKS='" + WERKS + "' AND [cost_center] IN('PV01') AND [UNIT_NO] IN ('A','B','T','P') ";
-                     
+
                         //艾肯出勤人員明細
                         strsql += " UNION ALL ";
                         strsql += " SELECT C.DATE,A.[USER_NO],[USER_NAME_CH],A.[WERKS],A.[UNIT_NO],[LINE_DESC],A.[STATION_ID],A.[CLASS_ID],0 OVER_H,0 PREPAR_REST_H " +
@@ -567,8 +577,8 @@ namespace carryMESUserInfoToWORK_RECORD
 
 
 
-                
-               
+
+
                 DataTable dtTxWorkManpower002 = ATMCdb.reDt(strsql);
                 DataRow[] rows = dtTxWorkManpower002.Select("[" + dtTxWorkManpower002.Columns[0].ToString().Trim() + "] is not null");
                 //ETL_Service.ETL_Service service = new ETL_Service.ETL_Service();
@@ -739,10 +749,10 @@ namespace carryMESUserInfoToWORK_RECORD
                     }
                 }
 
-                string uploadworktimeResult = "共有筆數：" + (rows.Length ).ToString() + " 匯入成功筆數：" + nPass + "失敗明細如下" + "\r\n" + nFail;
+                string uploadworktimeResult = "共有筆數：" + (rows.Length).ToString() + " 匯入成功筆數：" + nPass + "失敗明細如下" + "\r\n" + nFail;
                 I.WriteLineANDTextFile(System.Reflection.MethodBase.GetCurrentMethod().Name + ":" + uploadworktimeResult + WERKS);
-                ATMCdb.savemessage("OK", WERKS + "考勤投入工時結轉AMES完成", "共有筆數：" + (rows.Length ).ToString() + " 匯入成功筆數：" + nPass);
-                I.WriteLineANDTextFile(System.Reflection.MethodBase.GetCurrentMethod().Name + ":" + WERKS+ "考勤投入工時結轉AMES完成 : " + uploadworktimeResult);
+                ATMCdb.savemessage("OK", WERKS + "考勤投入工時結轉AMES完成", "共有筆數：" + (rows.Length).ToString() + " 匯入成功筆數：" + nPass);
+                I.WriteLineANDTextFile(System.Reflection.MethodBase.GetCurrentMethod().Name + ":" + WERKS + "考勤投入工時結轉AMES完成 : " + uploadworktimeResult);
                 //S.WriteTextFile2(Application.StartupPath, "資料筆數" + "：" + dt.Rows.Count, "MAT_CAPTION_ORDER結轉完成");
                 if (dtErrorRowdata.Rows.Count > 0)
                 {
@@ -782,15 +792,15 @@ namespace carryMESUserInfoToWORK_RECORD
             }
             catch (Exception ex)
             {
-                Util.pLogger.ErrorFormat(System.Reflection.MethodBase.GetCurrentMethod().Name + WERKS+":{0}", ex.Message);
-                I.WriteLineANDTextFile(System.Reflection.MethodBase.GetCurrentMethod().Name + WERKS+ ":" + "fail:" + ex.Message);
+                Util.pLogger.ErrorFormat(System.Reflection.MethodBase.GetCurrentMethod().Name + WERKS + ":{0}", ex.Message);
+                I.WriteLineANDTextFile(System.Reflection.MethodBase.GetCurrentMethod().Name + WERKS + ":" + "fail:" + ex.Message);
             }
         }
         #endregion
         #region  新進員工14天內效率0.5倍匯入MES
         private void UPDATETxSupport(string WERKS) //2019/08/24 完成移轉ATMC資料庫
         {
-            I.WriteLineANDTextFile(System.Reflection.MethodBase.GetCurrentMethod().Name + WERKS+ ":" + "Start");
+            I.WriteLineANDTextFile(System.Reflection.MethodBase.GetCurrentMethod().Name + WERKS + ":" + "Start");
             try
             {
                 DataTable dtQrySupport_User = Q.QrySupport_User("", "", DateTime.Now.AddDays(-3).ToString("yyyy-MM-dd"), DateTime.Now.ToString("yyyy-MM-dd"), "", "", "", "").Tables[0];
@@ -850,14 +860,14 @@ namespace carryMESUserInfoToWORK_RECORD
                             }
                         }
                     }
-                    string uploadworktimeResult = "共有筆數：" + (rows.Length ).ToString() + " 匯入成功筆數：" + nPass + "失敗明細如下" + "\r\n" + nFail;
-                    I.WriteLineANDTextFile(System.Reflection.MethodBase.GetCurrentMethod().Name + ":" + WERKS + uploadworktimeResult+ "\r\n" + "失敗明細如下" + "\r\n" + nFail);
+                    string uploadworktimeResult = "共有筆數：" + (rows.Length).ToString() + " 匯入成功筆數：" + nPass + "失敗明細如下" + "\r\n" + nFail;
+                    I.WriteLineANDTextFile(System.Reflection.MethodBase.GetCurrentMethod().Name + ":" + WERKS + uploadworktimeResult + "\r\n" + "失敗明細如下" + "\r\n" + nFail);
                 }
             }
             catch (Exception ex)
             {
-                Util.pLogger.ErrorFormat(System.Reflection.MethodBase.GetCurrentMethod().Name + WERKS+ ":{0}", ex.Message);
-                I.WriteLineANDTextFile(System.Reflection.MethodBase.GetCurrentMethod().Name + WERKS+":" + "fail:" + ex.Message);
+                Util.pLogger.ErrorFormat(System.Reflection.MethodBase.GetCurrentMethod().Name + WERKS + ":{0}", ex.Message);
+                I.WriteLineANDTextFile(System.Reflection.MethodBase.GetCurrentMethod().Name + WERKS + ":" + "fail:" + ex.Message);
             }
         }
 
@@ -885,7 +895,7 @@ namespace carryMESUserInfoToWORK_RECORD
         #region 備份MES投入工時明細資料
         private void copy_QryWorkManPower(string WERKS)
         {
-            I.WriteLineANDTextFile(System.Reflection.MethodBase.GetCurrentMethod().Name + ":" + WERKS+ "Start");
+            I.WriteLineANDTextFile(System.Reflection.MethodBase.GetCurrentMethod().Name + ":" + WERKS + "Start");
 
             try
             {
@@ -901,19 +911,19 @@ namespace carryMESUserInfoToWORK_RECORD
                                     ,"LEAVE_H","CREATE_DATE","UPDATE_DATE","UNIT_NAME","CLASS_NAME"
                                     ,"LINE_ID","STATION_ID","BREAK_TIME","WERKS","FACT_WORK_H","CLASS_NO","DEPT_NO"};
                 string nresult = ATMCdb.SqlBulkCopy(dtQryWorkManPower, sColumnName, "IE_MES.QryWorkManPower");
-                if (nresult=="OK")
+                if (nresult == "OK")
                 {
-                    I.WriteLineANDTextFile(System.Reflection.MethodBase.GetCurrentMethod().Name + ":" + WERKS+ "MES出勤明細結轉OK");
+                    I.WriteLineANDTextFile(System.Reflection.MethodBase.GetCurrentMethod().Name + ":" + WERKS + "MES出勤明細結轉OK");
                 }
                 else
                 {
-                    I.WriteLineANDTextFile(System.Reflection.MethodBase.GetCurrentMethod().Name + ":" + WERKS+ "MES出勤明細結轉失敗：" + nresult);
+                    I.WriteLineANDTextFile(System.Reflection.MethodBase.GetCurrentMethod().Name + ":" + WERKS + "MES出勤明細結轉失敗：" + nresult);
                 }
             }
             catch (Exception ex)
             {
-                Util.pLogger.ErrorFormat(System.Reflection.MethodBase.GetCurrentMethod().Name + WERKS+":{0}", ex.Message);
-                I.WriteLineANDTextFile(System.Reflection.MethodBase.GetCurrentMethod().Name + WERKS+ ":" + "fail:" + ex.Message);
+                Util.pLogger.ErrorFormat(System.Reflection.MethodBase.GetCurrentMethod().Name + WERKS + ":{0}", ex.Message);
+                I.WriteLineANDTextFile(System.Reflection.MethodBase.GetCurrentMethod().Name + WERKS + ":" + "fail:" + ex.Message);
             }
 
 
@@ -922,7 +932,7 @@ namespace carryMESUserInfoToWORK_RECORD
         #region  備份MES品質加扣分明細資料
         private void copy_QryEfficiencyQualityScore(string WERKS)
         {
-            I.WriteLineANDTextFile(System.Reflection.MethodBase.GetCurrentMethod().Name + ":" + WERKS+ "Start");
+            I.WriteLineANDTextFile(System.Reflection.MethodBase.GetCurrentMethod().Name + ":" + WERKS + "Start");
             try
             {
                 string nresult = "";
@@ -939,31 +949,31 @@ namespace carryMESUserInfoToWORK_RECORD
                     dtQryEfficiencyQualityScore.Columns.Add(column);
 
                     ATMCdb.savemessage("OK", WERKS + "品質積分明細更新", "清除品質積分明細30天內資料");
-                    if (WERKS=="TWM3" || WERKS == "TWM6")
+                    if (WERKS == "TWM3" || WERKS == "TWM6")
                     {
-                //        string[] sColumnName0 = {  "QUALITY_DATE", "WERKS",
-                //"UNIT_NO","LINE_ID","USER_NO","USER_NAME","ADD_SCORE_NUM","SUB_SCORE_NUM"
-                //,"MEMO","UPDATE_USER","UPDATE_DATE","QUALITY_COUNT","OUTPUT_WERKS"};
-                //        nresult = ATMCdb.SqlBulkCopy(dtQryEfficiencyQualityScore, sColumnName0, "IE_MES.QryEfficiencyQualityScore");
+                        //        string[] sColumnName0 = {  "QUALITY_DATE", "WERKS",
+                        //"UNIT_NO","LINE_ID","USER_NO","USER_NAME","ADD_SCORE_NUM","SUB_SCORE_NUM"
+                        //,"MEMO","UPDATE_USER","UPDATE_DATE","QUALITY_COUNT","OUTPUT_WERKS"};
+                        //        nresult = ATMCdb.SqlBulkCopy(dtQryEfficiencyQualityScore, sColumnName0, "IE_MES.QryEfficiencyQualityScore");
                     }
                     else
                     {
                         string[] sColumnName1 = { "QUALITY_ID", "QUALITY_DATE", "WERKS",
                 "UNIT_NO","LINE_ID","USER_NO","USER_NAME","ADD_SCORE_NUM","SUB_SCORE_NUM"
                 ,"MEMO","UPDATE_USER","UPDATE_DATE","QUALITY_COUNT","OUTPUT_WERKS"};
-                       nresult = ATMCdb.SqlBulkCopy(dtQryEfficiencyQualityScore, sColumnName1, "IE_MES.QryEfficiencyQualityScore");
+                        nresult = ATMCdb.SqlBulkCopy(dtQryEfficiencyQualityScore, sColumnName1, "IE_MES.QryEfficiencyQualityScore");
                     }
 
-                  
 
-                   
-                    if (nresult=="OK")
+
+
+                    if (nresult == "OK")
                     {
-                        I.WriteLineANDTextFile(System.Reflection.MethodBase.GetCurrentMethod().Name + WERKS+ ":" + "更新品質積分明細30天內資料OK");
+                        I.WriteLineANDTextFile(System.Reflection.MethodBase.GetCurrentMethod().Name + WERKS + ":" + "更新品質積分明細30天內資料OK");
                     }
                     else
                     {
-                        I.WriteLineANDTextFile(System.Reflection.MethodBase.GetCurrentMethod().Name + WERKS+ ":" + WERKS+ nresult);
+                        I.WriteLineANDTextFile(System.Reflection.MethodBase.GetCurrentMethod().Name + WERKS + ":" + WERKS + nresult);
                     }
                     dtQryEfficiencyQualityScore.Dispose();//釋放連接物件資源
 
@@ -971,8 +981,8 @@ namespace carryMESUserInfoToWORK_RECORD
             }
             catch (Exception ex)
             {
-                Util.pLogger.ErrorFormat(System.Reflection.MethodBase.GetCurrentMethod().Name + WERKS+ ":{0}", ex.Message);
-                I.WriteLineANDTextFile(System.Reflection.MethodBase.GetCurrentMethod().Name + WERKS+ ":" + "fail:" + ex.Message);
+                Util.pLogger.ErrorFormat(System.Reflection.MethodBase.GetCurrentMethod().Name + WERKS + ":{0}", ex.Message);
+                I.WriteLineANDTextFile(System.Reflection.MethodBase.GetCurrentMethod().Name + WERKS + ":" + "fail:" + ex.Message);
             }
         }
         #endregion
