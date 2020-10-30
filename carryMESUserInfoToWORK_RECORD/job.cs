@@ -168,7 +168,7 @@ namespace carryMESUserInfoToWORK_RECORD
                 I.WriteLineANDTextFile(System.Reflection.MethodBase.GetCurrentMethod().Name + ":" + WERKS + "Start");
                 string STRSQL = "SELECT * FROM ( ";
                 STRSQL += " SELECT [USER_ID],[USER_NO],[WERKS],[DEPT_ID],[cr_datetime] FROM [ATMC].[IE_MES].[MES_QryUserInfo001]  WHERE [cr_datetime] > GETDATE()-1 AND [WERKS]='" + WERKS + "') A LEFT JOIN  ";
-                STRSQL += " (SELECT DISTINCT[EMPLR_ID],[DIMISSIONDATE] FROM [ATMC].[IE].VW_Profile WHERE [DIMISSIONDATE] <> '') B  ";
+                STRSQL += " (select [EMPLR_ID],[DIMISSIONDATE] from (SELECT *, ROW_NUMBER() over(partition by [EMPLR_ID] order by PK_ID desc) rn FROM [ATMC].[IE].VW_Profile where [cr_datetime] > DATEADD(yy, DATEDIFF(yy, 0, GETDATE()), 0)) a where rn = 1 and [DIMISSIONDATE] <> '') B  ";
                 STRSQL += " ON A.[USER_NO]=B.EMPLR_ID WHERE [DIMISSIONDATE] IS NOT NULL AND B.[DIMISSIONDATE] < A.[cr_datetime] ";
                 DataSet set1 = new DataSet();
                 DataTable dtQryUserInfo001 = ATMCdb.reDt(STRSQL);
@@ -268,7 +268,7 @@ namespace carryMESUserInfoToWORK_RECORD
             sparam += ",ISNULL([Dep1],'') Dep1,ISNULL([Dep2],'') Dep2,ISNULL([Dep3],'') Dep3,ISNULL([Dep4],'') Dep4,[cost_center],[Emp_Status],[DIMISSIONDATE],[ONBOARD_DT]";
             sparam += " FROM [Employee_New].[dbo].[VW_Profile_Linkou] ";
             string sparam1 = "SELECT [TIMECLASSCODE],[SHIFT_NAME],[SHIFT_BEGIN],[SHIFT_END],[WORKHOURS],[BREAK_BEGIN],[BREAK_END],[MEALHOURS] FROM [Employee_New].[dbo].[VW_DutyShift_Linkou]";
-            string sparam2 = "SELECT [DATE_MARK],[DATE_NAME],[DATE_TYPE] FROM [Employee_New].[dbo].[VW_CALENDAR_Linkou] WHERE [DATE_MARK] >=GETDATE()-1";
+            string sparam2 = "SELECT [DATE_MARK],[DATE_NAME],[DATE_TYPE] FROM [Employee_New].[dbo].[VW_CALENDAR_Linkou] WHERE [DATE_MARK] >=GETDATE()-1 and SHIFT_ID = N'日班(0830-1730)'";
             DataSet ds = new DataSet();
             DataTable dt = new DataTable();
             DataTable dt1 = new DataTable();
