@@ -54,6 +54,11 @@ namespace carryMESUserInfoToWORK_RECORD
             capini();
             COPY_QryWorkClass();
             UPDATE_MES_QryUserInfo001();
+
+            //TxWorkManpower002("TWM3");
+            //TxWorkManpower002("TWM6");
+            //TxWorkManpower002("TWM8");
+            //TxWorkManpower002("TWM9");
         }
         #region 批量移轉資料至ATMC
         //  public void capWORK_RECORD()
@@ -452,6 +457,7 @@ namespace carryMESUserInfoToWORK_RECORD
             try
             {
                 string sSTARTDATE = DateTime.Now.AddDays(-2).ToString("yyyy-MM-dd");
+                //string sSTARTDATE = new DateTime(2020, 11, 1).ToString("yyyy-MM-dd");
                 capEmployee_NewDATA();
                 capWorkRecordToATMC(sSTARTDATE);
                 string nresult = ATMCdb.scalstp("[IE].[UPDATE_WORK_RECORD]");
@@ -525,11 +531,11 @@ namespace carryMESUserInfoToWORK_RECORD
                                                         ",A.[CLASS_NO],A.[DEPT_NO] cost_center,'' Dep1,'' Dep2,'' Dep3,'' Dep4,8 inputtime,A.[USER_NO] EMPLR_ID,[INPUT_HRS_FLAG],'' ONBOARD_DT " +
                                                         "FROM [ATMC].[IE_MES].[MES_QryUserInfo001] A LEFT JOIN [ATMC].[IE_MES].[QryWorkManPower] B ON A.USER_NO=B.USER_NO AND A.cr_datetime=B.POWER_DATE " +
                                                         "LEFT JOIN [ATMC].[IE].[WORKDAYCALENDAR] C ON A.cr_datetime=C.DATE " +
-                                                        "where left(A.[USER_NO],1)='I'  AND A.WERKS='" + WERKS + "' and [cr_datetime] >='2019-12-04' AND [cr_datetime] =  convert(date,getdate()) AND  [FACT_WORK_H] IS NULL AND A.[UNIT_NO] IN ('A','B','T','P') ";
+                                                        "where left(A.[USER_NO],1)='I'  AND A.WERKS='" + WERKS + "' and [cr_datetime] >='2019-12-04' AND [cr_datetime] = convert(date,getdate()) AND  [FACT_WORK_H] IS NULL AND A.[UNIT_NO] IN ('A','B','T','P') ";
                         break;
                     case "TWM3":
                         //TWM3 special trigger, only upload when hour 7 or 8.(OZ)
-                        if (DateTime.Now.Hour == 7 || DateTime.Now.Hour == 8 || DateTime.Now.Hour == 17 || DateTime.Now.Hour == 18)
+                        if (DateTime.Now.Hour == 7 || DateTime.Now.Hour == 8)
                         {
 
                             //All data just need upload what [WorkDate] >= convert(date,getdate()-1)
